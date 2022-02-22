@@ -1,0 +1,22 @@
+<html>
+    <head>
+        <style>
+            body {
+                background-color: rgb(252, 116, 6)
+            }
+        </style>
+            <script language="Javascript">
+                function ora(){
+                    var date = new Date();
+                    var hour = date.getHours();
+                    document.getElementById("visualizza").innerHTML = hour;
+                }
+            </script>
+    </head>
+    <body>
+        <p id="visualizza"></p>
+        <script language="Javascript">
+            ora();
+        </script>
+    </body>
+</html>
