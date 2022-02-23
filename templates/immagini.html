@@ -1,11 +1,12 @@
 <html>
     <head>
-        <title>Home</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <title>Home</title>
     </head>
     <body>
-        <a href = "/previsioni"><img src="static/images/meteo.jpg" alt = "meteo"></a>
-        <a href = "/citazioni"><img src="static/images/libro.jpg" alt = "libro"></a>
-        <img id = "calendario" src="{{url_for('static', filename='images/calendario.jpg')}}">
+
+        <a class = "foto" href = "/meteo"><img src="static/images/meteo.jpg" alt = "meteo" width="500" height="300"></a>
+        <a class = "foto" href = "/citazioni"><img src="static/images/libro.jpg" alt = "libro" width="500" height="300"></a>
+        <a class = "foto" href = "/scuola"><img src="static/images/calendario.jpg" alt = "calendario" width="500" height="300"></a>
     </body>
 </html>

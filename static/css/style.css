@@ -1,10 +1,18 @@
-img {
+.foto {
     position: relative;
-    top: 170px;
-    width: 400px;
-    height: 300px;
-    padding: 110px;
+    top: 350px;
+    padding: 140px;
 }
 body {
     background-color: rgb(231, 200, 23)
+}
+#previsione {
+    position:relative;
+    top: 30px;
+    left: 150px;    
+}
+#clima {
+    position: relative;
+    bottom: 380px;
+    left: 1300px;
 }
