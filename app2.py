@@ -1,27 +1,22 @@
 #realizzare un server web che visualizzi l'ora e colori lo sfondo in base all'orario: un colore per la mattina, uno per il pomeriggio, uno per la sera ed un per la notte
 from flask import Flask, render_template
+from datetime import datetime
+
 app = Flask(__name__)
 
-import datetime
-ora = datetime.datetime.now()
-ora = ora.hour
+@app.route("/",methods=["GET"])
+def time():
+  hour = datetime.now().hour
+  hour = hour + 1
+  if hour < 6:
+    return render_template("orario.html", color = "DarkBlue", testo = "É notte, sono le " + str(hour))
+  elif hour < 13:
+    return render_template("orario.html", color = "red", testo = "É mattina, sono le " + str(hour))
+  elif hour < 18:
+    return render_template("orario.html", color = "orange", testo = "É pomeriggio, sono le " + str(hour))
+  else:
+    return render_template("orario.html", color = "blue", testo = "É sera, sono le " + str(hour))
 
-if ora >= 6 and ora < 13:
-  @app.route('/', methods=['GET'])
-  def mattina():
-    return render_template("mattina.html")
-elif ora >= 18 and ora < 22:
-  @app.route('/', methods=['GET'])
-  def pomeriggio():
-    return render_template("pomeriggio.html")    
-elif ora >= 18 and ora < 22:
-  @app.route('/', methods=['GET'])
-  def sera():
-    return render_template("sera.html")
-else:
-  @app.route('/', methods=['GET'])
-  def notte():
-      return render_template("notte.html")
 
 if __name__ == '__main__':
   app.run(host='0.0.0.0', port=3245, debug=True)
