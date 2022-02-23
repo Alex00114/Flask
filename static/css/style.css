@@ -1,0 +1,10 @@
+img {
+    position: relative;
+    top: 170px;
+    width: 400px;
+    height: 300px;
+    padding: 110px;
+}
+body {
+    background-color: rgb(231, 200, 23)
+}

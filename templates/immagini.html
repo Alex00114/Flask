@@ -1,0 +1,10 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    </head>
+    <body>
+        <a href = "{{url_for('templates', filename='previsioni.html')}}"><img id = "previsioni" src="{{url_for('static', filename='images/meteo.jpg')}}"/></a>
+        <img id = "libro" src="{{url_for('static', filename='images/libro.jpg')}}"/>
+        <img id = "calendario" src="{{url_for('static', filename='images/calendario.jpg')}}"/>
+    </body>
+</html>
