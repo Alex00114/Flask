@@ -1,8 +1,9 @@
 <html>
     <head>
-
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <title>Meteo</title>
     </head>
     <body>
-        <p>ciao</p>
+        <img src="{{meteo}}" width="1000" height="800">
     </body>
 </html>
