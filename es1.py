@@ -1,12 +1,13 @@
 from flask import Flask, render_template
 import random
+import datetime
 app = Flask(__name__)
 
-@app.route('/', methods=['GET'])
+@app.route('/')
 def immagini():
     return render_template("immagini.html")
 
-@app.route('/meteo', methods=['GET'])
+@app.route('/meteo')
 def meteo():
   nran = random.randint(0,8)
   if nran <= 2:
@@ -19,6 +20,24 @@ def meteo():
         immagine = "static/images/sole.jpg"
         previsione = "Soleggiato"
   return render_template("previsioni.html", meteo = immagine, testo = previsione)
+
+@app.route("/frasicelebri")
+def libro():
+    frasi = [{"Autore": "Frida Kahlo" , "Frase": "Innamorati di te, della vita e dopo di chi vuoi." },
+    {"Autore": "Papa Giovanni paolo II" , "Frase": "Prendete in mano la vostra vita e fatene un capolavoro."},
+    {"Autore": "Charlie Chaplin" , "Frase": "Un giorno senza un sorriso è un giorno perso."},{"Autore": "Francesco Bacone" , "Frase": "Sapere è potere."},
+    {"Autore": "Italo Calvino" , "Frase": "Il divertimento è una cosa seria."},{"Autore": "Molière" , "Frase": "Maggiore è l'ostacolo, maggiore è la gloria nel superarlo."},
+    {"Autore": "Les Brown", "Frase": "Più dura è la battaglia, più dolce è la vittoria."},{"Autore": "Luis Sepùlveda" , "Frase": "Vola solo chi osa farlo."},
+    {"Autore": "Lucio Anneo Seneca", "Frase": "Se vuoi essere amato, ama."},{"Autore": "Voltaire", "Frase": "Chi non ha bisogno di niente non è mai povero."}]
+    fraseRandom = random.randint(0,9)
+    return render_template("citazioni.html", autore = frasi[fraseRandom]["Autore"], frase = frasi[fraseRandom]["Frase"])
+
+@app.route('/quantomanca')
+def calendario():
+      fine = datetime.date(2022, 6, 8)
+      oggi = datetime.today
+      differenza = fine - oggi
+    return render_template("scuola.html", giorni = differenza)
 
 
 if __name__ == '__main__':

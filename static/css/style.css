@@ -1,10 +1,16 @@
+.titolo {
+    text-align:center;
+    margin-top: -10px;
+    color:rgb(238, 145, 58)
+}
 .foto {
     position: relative;
     top: 350px;
-    padding: 140px;
+    padding: 50px;
+    text-align: center;
 }
 body {
-    background-color: rgb(231, 200, 23)
+    background-color: rgb(134, 134, 132)
 }
 #previsione {
     position:relative;
@@ -12,7 +18,12 @@ body {
     left: 150px;    
 }
 #clima {
+    color: white;
     position: relative;
     bottom: 380px;
     left: 1300px;
+}
+#autore {
+    font-style:oblique;
+    color: white;
 }
