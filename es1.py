@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 import random
-import datetime
+from datetime import datetime
 app = Flask(__name__)
 
 @app.route('/')
@@ -32,12 +32,11 @@ def libro():
     fraseRandom = random.randint(0,9)
     return render_template("citazioni.html", autore = frasi[fraseRandom]["Autore"], frase = frasi[fraseRandom]["Frase"])
 
-@app.route('/quantomanca')
+@app.route("/quantomanca")
 def calendario():
-      fine = datetime.date(2022, 6, 8)
-      oggi = datetime.today
-      differenza = fine - oggi
-    return render_template("scuola.html", giorni = differenza)
+    now = datetime.now()
+    fine = datetime(2022,6,8)
+    return render_template("scuola.html", data = (fine - now).days)
 
 
 if __name__ == '__main__':
