@@ -8,8 +8,8 @@ def home_page():
 
 @app.route('/data', methods=['GET'])
 def dati():
-    name = request.args['Name']
-    return (name)
+    nome = request.args['Name']
+    return render_template("welcome.html", name = nome)
 
 
 if __name__ == '__main__':
