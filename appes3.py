@@ -11,12 +11,31 @@ capoluoghiRegione = {"Abruzzo" :"L'Aquila", "Basilicata" : "Potenza", "Calabria"
 def home_page():
     return render_template("capoluoghi.html")
 
-@app.route('/risultato', methods=['GET'])
-def ris():
-    regione = request.args["testo"]
-    risposta = capoluoghiRegione[regione]
-    return render_template("risultato.html", ris = risposta)
+@app.route('/data', methods=['GET'])
+def Data():
+    scelta = request.args["Scelta"]
+    if scelta == "Regione":
+        return render_template("regioneRis.html")
+    else:
+        return render_template("capoluogoRis.html")    
 
+@app.route("/dataReg", methods=["GET"])
+def Reg():
+    regione = request.args["testo"]
+    for key, value in capoluoghiRegione.items():
+        if regione == key:
+            capoluogo = value
+            return render_template("risultato.html", ris = capoluogo)
+    return "<h1>Errore, la regione inserita non esiste</h1>"
+
+@app.route("/dataCap", methods=["GET"])
+def Cap():
+    capoluogo = request.args["testo"]
+    for key, value in capoluoghiRegione.items():
+        if capoluogo == value:
+             regione = key
+             return render_template("risultato.html", ris = regione)
+    return "<h1>Errore, il capoluogo inserito non esiste</h1>"
 
 
 if __name__ == '__main__':
