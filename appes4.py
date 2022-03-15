@@ -3,7 +3,6 @@
 #I dati da inserire nel menù a tendina devono essere caricati automaticamente dalla pagina
 from flask import Flask, render_template, request
 app = Flask(__name__)
-
 import pandas as pd 
 
 df = pd.read_csv("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/platea-dose-addizionale-booster.csv")
