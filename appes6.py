@@ -60,6 +60,29 @@ def pngQuartiere():
     return Response(output.getvalue(), mimetype='image/png')
 
 
+@app.route('/scelta', methods=("POST", "GET"))
+def scegli():
+    quart = milano.NIL
+    return render_template('scelta_quartieri.html', quartiere = quart)
+
+@app.route('/immagine_scelta', methods=("POST", "GET"))
+def img_scelta():
+    global input
+    input = request.args["Scelta"]
+    return render_template('plot_scelta.html')
+
+@app.route('/scelta.png', methods=['GET'])
+def dropdown():
+    mappa_quartiere = milano[milano.NIL == input]
+
+    fig, ax = plt.subplots(figsize = (12,8))
+    mappa_quartiere.to_crs(epsg=3857).plot(ax=ax, alpha=0.6, edgecolor = "k")
+    contextily.add_basemap(ax=ax)
+
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)
+    return Response(output.getvalue(), mimetype='image/png')
+
 
 if __name__ == '__main__':
   app.run(host='0.0.0.0', port=3246, debug=True)
