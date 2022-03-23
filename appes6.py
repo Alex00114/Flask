@@ -16,23 +16,50 @@ milano = geopandas.read_file("/workspace/Flask/ds964_nil_wm.zip")
 
 @app.route('/', methods=['GET'])
 def home():
-    return render_template('quartiere.html')
+    return render_template('home_quartieri.html')
+
+@app.route('/visualizza', methods=("POST", "GET"))
+def mappa():
+    return render_template('plot.html')
 
 @app.route('/plot.png', methods=['GET'])
 def plot_png():
-    qrt = request.args['Quartiere']
     fig, ax = plt.subplots(figsize = (12,8))
 
-    mappa_milano = milano[milano.NIL == qrt]
-    mappa_milano.to_crs(epsg=3857).plot(ax=ax, alpha=0.6)
+    milano.to_crs(epsg=3857).plot(ax=ax, alpha=0.6, edgecolor = "k")
     contextily.add_basemap(ax=ax)
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)
     return Response(output.getvalue(), mimetype='image/png')
 
-@app.route('/plot', methods=("POST", "GET"))
-def mpl():
-    return render_template('plot.html', PageTitle = "Matplotlib")
+
+@app.route('/ricerca', methods=("POST", "GET"))
+def search():
+    return render_template('quartiere.html')
+
+@app.route('/quartiereInserito', methods=("POST", "GET"))
+def qrtInserito():
+    global user
+    quartieri = [item for item in milano.NIL]
+    user = request.args["Quartiere"]
+    if user in quartieri:
+        return render_template('plot_quartiere.html')
+    else:
+        return ("<h1>Errore, il quartiere inserito non esiste</h1>")
+
+@app.route('/quartiereInserito.png', methods=['GET'])
+def pngQuartiere():
+    mappa_quartiere = milano[milano.NIL == user]
+
+    fig, ax = plt.subplots(figsize = (12,8))
+    mappa_quartiere.to_crs(epsg=3857).plot(ax=ax, alpha=0.6, edgecolor = "k")
+    contextily.add_basemap(ax=ax)
+
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)
+    return Response(output.getvalue(), mimetype='image/png')
+
+
 
 if __name__ == '__main__':
   app.run(host='0.0.0.0', port=3246, debug=True)
