@@ -12,6 +12,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 milano = geopandas.read_file("/workspace/Flask/ds964_nil_wm.zip")
+fontanelle = geopandas.read_file("/workspace/Flask/Fontanelle.zip")
 
 
 @app.route('/', methods=['GET'])
@@ -62,6 +63,7 @@ def pngQuartiere():
 
 @app.route('/scelta', methods=("POST", "GET"))
 def scegli():
+    global quart
     quart = milano.NIL
     return render_template('scelta_quartieri.html', quartiere = quart)
 
@@ -78,6 +80,33 @@ def dropdown():
     fig, ax = plt.subplots(figsize = (12,8))
     mappa_quartiere.to_crs(epsg=3857).plot(ax=ax, alpha=0.6, edgecolor = "k")
     contextily.add_basemap(ax=ax)
+
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)
+    return Response(output.getvalue(), mimetype='image/png')
+
+
+@app.route("/fontanelle", methods=["GET"])
+def fontanelle1():
+    quart = milano.NIL
+    return render_template("fontanelle.html", quartieri = quart)
+
+@app.route('/fontanelleris', methods=("POST", "GET"))
+def fontanelleRis():
+    global map_quart, font_quart
+    user_input = request.args["Quartiere"]
+    map_quart = milano[milano["NIL"] == user_input]
+    font_quart = fontanelle[fontanelle.within(map_quart.geometry.squeeze())]
+    return render_template('fontanelleRis.html', tabella = font_quart.to_html())
+
+
+@app.route("/fontanelle.png", methods=["GET"])
+def png_fontanelle():
+    fig, ax = plt.subplots(figsize = (12,8))
+
+    map_quart.to_crs(epsg=3857).plot(ax=ax, alpha=0.6, edgecolor="k")
+    font_quart.to_crs(epsg=3857).plot(ax=ax, color = "r")
+    contextily.add_basemap(ax=ax)   
 
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)
