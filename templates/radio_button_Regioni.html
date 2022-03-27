@@ -1,0 +1,12 @@
+<head>
+    
+</head>
+<body>
+    <form action="/province" method="get">
+        <h2>Selezionare la regione di cui si vuole sapere le province</h2>
+        {% for reg in regioni %}
+         <input type="radio" name="Regioni" value="{{reg}}" required>{{reg}} <br>
+        {% endfor %}
+        <input type="submit" value="Submit">
+    </form>
+</body>
