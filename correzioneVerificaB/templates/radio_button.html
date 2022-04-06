@@ -1,0 +1,12 @@
+<head>
+    
+</head>
+<body>
+    <form action="/radio" method="get">
+        <h2>Selezionare il quartiere di cui si vogliono sapere le stazioni radio</h2>
+        {% for radio in quartieri %}
+         <input type="radio" name="Quartieri" value="{{radio}}" required>{{radio}} <br>
+        {% endfor %}
+        <h1><input type="submit" value="Submit"></h1>
+    </form>
+</body>
