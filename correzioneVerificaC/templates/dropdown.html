@@ -1,0 +1,8 @@
+<form action="/mappa" method = "GET">
+    <select name="Linea">
+        {% for i in linee%}
+        <option value="{{i}}" >{{i}}</option>
+        {%endfor%}
+      </select>
+    <p><input type = "submit" value = "Submit" /></p>
+</form>

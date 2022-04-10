@@ -12,7 +12,7 @@ import pandas as pd
 import numpy as np
 
 tram_bus = geopandas.read_file("/workspace/Flask/correzioneVerificaC/tpl_percorsi_shp.zip")
-
+milano = geopandas.read_file("/workspace/Flask/correzioneVerificaC/ds964_nil_wm.zip")
 
 @app.route('/', methods=['GET'])
 def home():
@@ -24,7 +24,7 @@ def selezione():
     if scelta == "Es1":
         return redirect(url_for("lunghezza"))
     elif scelta == "Es2":
-        return redirect(url_for("input"))
+        return redirect(url_for("ricerca"))
     else:
         return redirect(url_for("dropdown"))
 
@@ -36,20 +36,43 @@ def lunghezza():
 def lunghezzaCompresa():
     val1 = request.args["Valore1"]
     val2 = request.args["Valore2"]
-    tram_bus_compresi = tram_bus[tram_bus["lung_km"].astype("float") > val1]
-    tram_bus_compresi = tram_bus_compresi[tram_bus_compresi["lung_km"].astype("float") < val2]
-    
+    tram_bus_compresi = tram_bus[tram_bus["lung_km"].astype("float") > float(val1)]
+    tram_bus_compresi = tram_bus_compresi[tram_bus_compresi["lung_km"].astype("float") < float(val2)].sort_values(by = "linea", ascending = True)
     return render_template("elenco_compresi.html", tabella = tram_bus_compresi.to_html())
 
+@app.route('/ricerca', methods=['GET'])
+def ricerca():
+    return render_template("input.html")
 
+@app.route("/lineeQuart", methods=["GET"])
+def lineequart():
+    quartiere = request.args["Quartiere"]
+    mappa_quartiere = milano[milano["NIL"].str.contains(quartiere)]
+    linee_quartiere = tram_bus[tram_bus.intersects(mappa_quartiere.geometry.squeeze())].sort_values(by = "linea", ascending = True)
+    return render_template("tabella_linee.html", tabella = linee_quartiere.to_html())
 
+@app.route('/dropdown', methods=['GET'])
+def dropdown():
+    return render_template("dropdown.html", linee = tram_bus["linea"].drop_duplicates().sort_values(ascending=True))
 
+@app.route("/mappa", methods=["GET"])
+def mappa():
+    global mappa_linea
+    linea = int(request.args["Linea"])
+    mappa_linea = tram_bus[tram_bus["linea"].astype("int") == linea]
+    return render_template("mappa.html")
 
+@app.route("/linea.png", methods=["GET"])
+def lineaPng():
+    fig, ax = plt.subplots(figsize = (12,8))
 
+    mappa_linea.to_crs(epsg=3857).plot(ax=ax, edgecolor="r")
+    milano.to_crs(epsg=3857).plot(ax=ax, alpha=0.6, edgecolor="k")
+    contextily.add_basemap(ax=ax)   
 
-
-
-
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)
+    return Response(output.getvalue(), mimetype='image/png')
 
 
 if __name__ == '__main__':
