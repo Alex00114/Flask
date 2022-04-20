@@ -15,7 +15,6 @@ provincie = geopandas.read_file("/workspace/Flask/correzioneVerificaA_2.1/ProvCM
 regioni = geopandas.read_file("/workspace/Flask/correzioneVerificaA_2.1/Reg01012021_g_WGS84.zip")
 ripartizioni = geopandas.read_file("/workspace/Flask/correzioneVerificaA_2.1/templates/georef-italy-ripartizione-geografica.geojson")
 
-
 @app.route('/', methods=['GET'])
 def home():
     return render_template("home.html")
@@ -50,6 +49,27 @@ def mappa():
 @app.route('/dropdownReg', methods=['GET'])
 def dropReg():
     return render_template("dropdownReg.html", regioni2 = regioni["DEN_REG"].sort_values(ascending = True))
+
+@app.route('/dropdownProv', methods=['GET'])
+def dropProv():
+    regione = request.args['Regione']
+
+    mappa_regione = regioni[regioni['DEN_REG'] == regione]
+    prov_regione = provincie[provincie.within(mappa_regione.geometry.squeeze())]
+    return render_template("dropdownProv.html", province2 = prov_regione["DEN_PROV"].sort_values(ascending = True))
+
+@app.route('/dropdownRip', methods=['GET'])
+def dropRip():
+    return render_template("dropdownRip.html", ripartizioni2 = ripartizioni["rip_name"].sort_values(ascending = True))
+
+@app.route('/regRip', methods=['GET'])
+def regRip():
+    ripartizione = request.args['Ripartizione']
+
+    mappa_rip = ripartizioni[ripartizioni['rip_name'] == ripartizione]
+    reg_rip = regioni[regioni.within(mappa_rip.geometry.squeeze())]
+    return render_template("regRip.html", regioni2 = reg_rip["DEN_REG"].sort_values(ascending = True))
+
 
 if __name__ == '__main__':
   app.run(host='0.0.0.0', port=3245, debug=True)
